@@ -111,6 +111,11 @@
   return YES;
 }
 
+- (void)focusOnShell
+{
+  [self.currentTerm.terminal performSelector:@selector(becomeFirstResponder) withObject:nil afterDelay:0];
+}
+
 - (void)registerForKeyboardNotifications
 {
   [[NSNotificationCenter defaultCenter] addObserver:self
@@ -244,7 +249,7 @@
 {
   if (completed) {
     [self displayHUD];
-    [self.currentTerm.terminal performSelector:@selector(becomeFirstResponder) withObject:nil afterDelay:0];
+    [self focusOnShell];
   }
 }
 
@@ -323,11 +328,11 @@
 				    animated:NO
 				  completion:^(BOOL didComplete) {
 				    // Remove viewport from the list after animation
-				    if (didComplete) {
-		[weakSelf displayHUD];
-		[weakSelf.currentTerm.terminal performSelector:@selector(becomeFirstResponder) withObject:nil afterDelay:0];
-				    }
-				  }];
+            if (didComplete) {
+              [weakSelf displayHUD];
+              [weakSelf focusOnShell];
+	    }
+      }];
   } else {
     [self.viewports removeObjectAtIndex:idx];
     [_viewportsController setViewControllers:@[ _viewports[idx] ]
@@ -335,11 +340,11 @@
 				    animated:NO
 				  completion:^(BOOL didComplete) {
 				    // Remove viewport from the list after animation
-				    if (didComplete) {
-		[weakSelf displayHUD];
-		[weakSelf.currentTerm.terminal performSelector:@selector(becomeFirstResponder) withObject:nil afterDelay:0];
-				    }
-				  }];
+	if (didComplete) {
+	  [weakSelf displayHUD];
+	  [weakSelf focusOnShell];
+	}
+      }];
   }
 }
 
@@ -377,7 +382,7 @@
 				  if (didComplete) {
 				    [weakSelf displayHUD];
 				    // Still not in view hierarchy, so calling through selector. There should be a way...
-				    [weakSelf.currentTerm.terminal performSelector:@selector(becomeFirstResponder) withObject:nil afterDelay:0];
+				    [weakSelf focusOnShell];
 				  }
 				}];
 }
